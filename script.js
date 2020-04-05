@@ -20,6 +20,14 @@ for (var i = 0; i < 19; i++){
     //     <div    id='div-row' 
     //             class='row'
     //             data-id=${i}>`); 
+
+    // Check and apply local storage
+    if (checkStorage == null) {
+
+        events.push({eventId : i});
+        localStorage.setItem('events', JSON.stringify(events));
+        
+    };
         
 // Create Grid - Time
     var timeCol = $('<div class="time-block hour col-2">');
@@ -39,13 +47,10 @@ for (var i = 0; i < 19; i++){
     // Set Timeframe Class
     if (moment(startTime).isBefore(now)) {
         eventDescCol.addClass('past');
-        console.log('past');
     } else if (moment(startTime).isSame(now)) {
         eventDescCol.addClass('present');
-        console.log('present');
     } else if (moment(startTime).isAfter(now)) {
         eventDescCol.addClass('future');
-        console.log('future');
     };
 
     // Create TextArea
@@ -53,6 +58,9 @@ for (var i = 0; i < 19; i++){
     eventDescText.attr('data-id', i);
     eventDescCol.html(eventDescText);
     divRow.append(eventDescCol);
+
+    var eventText = events[i].description;
+    eventDescText.val(eventText);
 
 // Create Grid - Save
     var saveCol = $('<div class="saveBtn col-2">');
@@ -62,10 +70,13 @@ for (var i = 0; i < 19; i++){
     saveCol.html(saveBtn);
 };
 
-// Btn Event Listener
-    $('.saveBtn').on("click", function() {
-        
-    })
-    
-    
+    // Btn Event Listener
+    $('.fa-save').on("click", function() {
+        // Set id
+        var dataId = $(this).attr('data-id');
+        var eventText = $(`textarea[data-id|='${dataId}']`).val();
+        events[dataId].description = eventText;
 
+        localStorage.setItem('events', JSON.stringify(events));
+
+    });
