@@ -1,9 +1,11 @@
 // Create Variables
 var currentJumbo = $('#currentDay');
-var currentDayTime = parseInt(moment().format('H'));
+var now = parseInt(moment().format('H'));
 var startTime = 4;
 var endTime = 10;
 
+var events = JSON.parse(localStorage.getItem('events')) || [];
+var checkStorage = localStorage.getItem('events');
 
 // Append current day and time to Jumbotron
 $('#currentDay').text(moment().format('LLLL'));
@@ -17,7 +19,7 @@ for (var i = 0; i < 19; i++){
     // $('.container').append(`
     //     <div    id='div-row' 
     //             class='row'
-    //             data-id='i'>`); 
+    //             data-id=${i}>`); 
         
 // Create Grid - Time
     var timeCol = $('<div class="time-block hour col-2">');
@@ -34,30 +36,36 @@ for (var i = 0; i < 19; i++){
     var eventDescCol = $('<div class="description col-8">');
     eventDescCol.attr('data-time', startTime);
 
-    if (moment(startTime).isBefore(currentDayTime)) {
+    // Set Timeframe Class
+    if (moment(startTime).isBefore(now)) {
         eventDescCol.addClass('past');
         console.log('past');
-    } else if (moment(startTime).isSame(currentDayTime)) {
+    } else if (moment(startTime).isSame(now)) {
         eventDescCol.addClass('present');
         console.log('present');
-    } else if (moment(startTime).isAfter(currentDayTime)) {
+    } else if (moment(startTime).isAfter(now)) {
         eventDescCol.addClass('future');
         console.log('future');
     };
 
+    // Create TextArea
     var eventDescText = $('<textarea class="col-12" cols="90" rows="2"/>');
     eventDescText.attr('data-id', i);
     eventDescCol.html(eventDescText);
     divRow.append(eventDescCol);
 
 // Create Grid - Save
-
     var saveCol = $('<div class="saveBtn col-2">');
     divRow.append(saveCol);
     var saveBtn = $('<i class="fas fa-save"></i>');
     saveBtn.attr('data-id', i);
     saveCol.html(saveBtn);
-    
-
 };
+
+// Btn Event Listener
+    $('.saveBtn').on("click", function() {
+        
+    })
+    
+    
 
